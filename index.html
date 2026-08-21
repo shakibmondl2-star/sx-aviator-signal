@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SX Signal</title>
+<style>
+*{box-sizing:border-box}
+:root{--cyan:#12e7ff;--pink:#ff087b;--purple:#9c00ff;--green:#20ff68;--bg:#030810}
+html,body{margin:0;min-height:100%;font-family:Arial,"Noto Sans Bengali",sans-serif;background:#030810;color:#fff}
+body{overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 15%,rgba(0,220,255,.08),transparent 30%),radial-gradient(circle at 50% 90%,rgba(255,0,170,.09),transparent 35%)}
+.app{width:min(460px,100%);margin:auto;min-height:100vh;padding:18px 14px 30px;position:relative}
+.top-system{margin:4px auto 20px;width:84%;height:62px;border-radius:40px;display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(90deg,#b300ff,#e600ff);box-shadow:0 0 28px rgba(180,0,255,.35);font-weight:900;letter-spacing:2px;font-size:20px}
+.logo-mark{font-size:25px}
+.page{display:none;animation:fade .45s ease}.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.panel{border:2px solid var(--cyan);border-radius:38px;padding:30px 24px;background:linear-gradient(180deg,#070b14,#04070d);box-shadow:0 0 32px rgba(0,230,255,.15),inset 0 0 35px rgba(0,0,0,.55)}
+.brand{text-align:center;font-size:39px;font-weight:900;letter-spacing:4px;margin:8px 0 28px;background:linear-gradient(90deg,#00eaff,#6b7cff,#bf67ff);-webkit-background-clip:text;color:transparent}
+.clock{display:flex;justify-content:space-between;color:#5dff38;font-weight:900;font-size:16px;margin:0 10px 18px}
+.label{color:#a4b4d2;font-size:18px;letter-spacing:2px;margin:12px 0 8px}
+input{width:100%;padding:19px;border-radius:30px;border:2px solid #104b6c;background:#050a12;color:#fff;font-size:17px;outline:none}
+input:focus{border-color:var(--cyan);box-shadow:0 0 18px rgba(0,230,255,.2)}
+.btn{width:100%;padding:18px;border:0;border-radius:35px;margin-top:15px;color:#fff;font-weight:900;font-size:20px;letter-spacing:2px;cursor:pointer}
+.login{background:linear-gradient(90deg,#ff0078,#b400ff);box-shadow:0 0 25px rgba(255,0,130,.25)}
+.buy{background:linear-gradient(90deg,#b000ff,#4c00ff)}
+.tg{background:#0c4054;border:2px solid var(--cyan);box-shadow:0 0 20px rgba(0,220,255,.2)}
+a{text-decoration:none;text-align:center;display:block}
+.small-note{text-align:center;color:#71809a;font-size:12px;line-height:1.6;margin-top:18px}
+.pay-head{font-size:28px;text-align:center;color:#fff;margin-bottom:10px}
+.notice{border:2px solid #22d65c;border-radius:28px;padding:18px;color:#20ff68;background:#00130a;line-height:1.6;text-align:center;font-size:17px;font-weight:800;box-shadow:0 0 18px rgba(32,255,104,.13)}
+.pay-list{margin-top:22px;display:grid;gap:15px}
+.pay-btn{padding:19px;border-radius:30px;background:#fff;color:#222;font-size:20px;font-weight:900;border:4px solid #df167d;cursor:pointer}
+.pay-btn.nagad{border-color:#e32636}.pay-btn.rocket{border-color:#8b3aaa}
+.pay-detail{display:none;margin-top:18px;background:#fff;color:#111;border-radius:24px;padding:22px}
+.pay-detail.active{display:block}
+.demo-warning{color:#b11b1b;font-weight:800;line-height:1.5}
+.wallet{font-size:25px;font-weight:900;background:#eef0f5;border-radius:14px;padding:16px;margin:12px 0}
+.tx{width:100%;padding:16px;border:2px solid #7925ad;border-radius:0;font-size:17px}
+.signal-wrap{text-align:center}
+.logout{display:inline-block;padding:11px 22px;border:2px solid #ff087b;border-radius:25px;color:#ff4a9b;font-weight:900;margin-bottom:18px}
+.signal-title{font-size:38px;font-weight:900;letter-spacing:5px;background:linear-gradient(90deg,#ff0a7a,#8d3cff,#008dff);-webkit-background-clip:text;color:transparent;margin:12px 0 30px}
+.orbit{width:320px;height:320px;max-width:82vw;max-height:82vw;margin:0 auto 28px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.orbit:before{content:"";position:absolute;inset:3px;border-radius:50%;border:10px dashed #a600ff;animation:spin 6s linear infinite}
+.orbit:after{content:"";position:absolute;inset:28px;border-radius:50%;border:5px solid #ff123e;box-shadow:0 0 30px #ff123e,0 0 70px rgba(160,0,255,.45);animation:pulse 1.8s ease-in-out infinite}
+.inner{position:relative;z-index:2;width:72%;height:72%;border-radius:50%;border:3px solid #39ff18;box-shadow:0 0 18px #39ff18,inset 0 0 25px rgba(57,255,24,.15);display:flex;flex-direction:column;align-items:center;justify-content:center;background:#020509}
+.mult{font-size:57px;font-weight:900;color:#ff1010;text-shadow:0 0 14px #f00;letter-spacing:2px}
+.secs{font-size:18px;color:#d9e5ef;margin-top:8px}
+.signal-btn{border:2px solid #ff123e;border-radius:28px;padding:16px;color:#ff203f;font-size:19px;font-weight:900;background:#090b10}
+@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{50%{transform:scale(1.035);opacity:.82}}
+#err{min-height:20px;text-align:center;color:#ff586b;margin-top:10px}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top-system"><span class="logo-mark">▰</span> MORE SYSTEM <span>⌄</span></div>
+
+  <section id="login" class="page active">
+    <div class="panel">
+      <div class="clock"><span>● ONLINE</span><span id="clock">--:--:--</span></div>
+      <div class="brand">SX SIGNAL</div>
+      <div class="label">🔒 PASSWORD</div>
+      <input id="password" type="password" placeholder="Enter your password" autocomplete="off">
+      <button class="btn login" onclick="login()">LOGIN</button>
+      <button class="btn buy" onclick="go('buy')">BUY NOW</button>
+      <a class="btn tg" href="https://t.me/Ahmd_shakib" target="_blank">✈ TELEGRAM &nbsp; CONTACT</a>
+      <div id="err"></div>
+      <div class="small-note">Demo interface. No real payment verification is performed.</div>
+    </div>
+  </section>
+
+  <section id="buy" class="page">
+    <div class="panel">
+      <div class="pay-head">পেমেন্ট মাধ্যম নির্বাচন করুন</div>
+      <div class="notice">আমাদের এখানে Aviator-এর signal demo দেখানো হয়।<br>ডেমো মূল্য: ১৫০০ টাকা — permanent access UI.</div>
+      <div class="small-note">নিচের payment controls শুধু demonstration-এর জন্য। এই demo-তে কোনো টাকা পাঠাবেন না।</div>
+      <div class="pay-list">
+        <button class="pay-btn" onclick="pay('bkash')">BKASH PAY ›</button>
+        <button class="pay-btn nagad" onclick="pay('nagad')">NAGAD PAY ›</button>
+        <button class="pay-btn rocket" onclick="pay('rocket')">ROCKET PAY ›</button>
+      </div>
+
+      <div id="bkash" class="pay-detail">
+        <h2>bKash Pay</h2>
+        <div class="demo-warning">DEMO ONLY — real payment is disabled.</div>
+        <p><b>Wallet No*</b></p>
+        <div class="wallet">01333413567</div>
+        <p><b>Payment method:</b> Send Money</p>
+        <p><b>TrxID</b></p>
+        <input class="tx" placeholder="TrxID (demo only)">
+        <p class="small-note">ডেমোতে TrxID যাচাই করা হয় না। কোনো টাকা পাঠাবেন না।</p>
+        <a class="btn tg" href="https://t.me/Ahmd_shakib" target="_blank">ADMIN TELEGRAM</a>
+      </div>
+
+      <div id="nagad" class="pay-detail">
+        <h2>Nagad Pay</h2><div class="wallet">NOT AVAILABLE</div>
+      </div>
+      <div id="rocket" class="pay-detail">
+        <h2>Rocket Pay</h2><div class="wallet">NOT AVAILABLE</div>
+      </div>
+      <button class="btn" style="background:#17202c" onclick="go('login')">BACK</button>
+    </div>
+  </section>
+
+  <section id="signal" class="page">
+    <div class="signal-wrap">
+      <a class="logout" href="#" onclick="go('login');return false">↪ LOGOUT</a>
+      <div class="signal-title">SX SIGNAL</div>
+      <div class="orbit">
+        <div class="inner">
+          <div class="mult" id="mult">1.00x</div>
+          <div class="secs" id="secs">0 sec</div>
+        </div>
+      </div>
+      <div class="signal-btn">✈ AVIATOR SIGNAL</div>
+      <a class="btn tg" href="https://t.me/Ahmd_shakib" target="_blank">✈ CONTACT US</a>
+      <div class="small-note">The multiplier and duration are random demo values and are not predictions of a real Aviator/crash game.</div>
+    </div>
+  </section>
+</div>
+
+<script>
+const PASSWORD="F8EM-6JOS-W9YD-OOPG";
+let timer=null;
+
+function go(id){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id==='signal') startSignal();
+  if(id==='buy') closePays();
+}
+function login(){
+  const v=document.getElementById('password').value.trim();
+  const e=document.getElementById('err');
+  if(v===PASSWORD){e.textContent='';go('signal')}
+  else e.textContent='Password ভুল হয়েছে।';
+}
+function pay(id){
+  closePays();
+  document.getElementById(id).classList.add('active');
+}
+function closePays(){document.querySelectorAll('.pay-detail').forEach(x=>x.classList.remove('active'))}
+function startSignal(){
+  clearTimeout(timer);
+  const m=(1+Math.random()*4.9).toFixed(2);
+  const s=Math.floor(3+Math.random()*13);
+  document.getElementById('mult').textContent=m+'x';
+  document.getElementById('secs').textContent=s+' sec';
+  timer=setTimeout(startSignal,s*1000);
+}
+function updateClock(){
+  const d=new Date();
+  document.getElementById('clock').textContent=d.toLocaleTimeString('en-US',{hour12:true});
+}
+setInterval(updateClock,1000);updateClock();
+</script>
+</body>
+</html>
